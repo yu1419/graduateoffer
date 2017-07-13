@@ -1,9 +1,7 @@
-from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
 import requests
 import time
-
 
 post_pattern = re.compile("normalthread_.*?")
 # normal link has a id start with normalthread
@@ -21,7 +19,7 @@ url_head = ("http://www.1point3acres.com/bbs/forum.php?"
 s = requests.Session()
 
 
-def scrape_page(page, connect_session, url_head ,post_pattern, url_class_name):
+def scrape_page(page, connect_session, url_head, post_pattern, url_class_name):
     # get offer links for each page
 
     url = url_head + str(page)
@@ -30,25 +28,6 @@ def scrape_page(page, connect_session, url_head ,post_pattern, url_class_name):
     bsObj = BeautifulSoup(html, "html5lib")
     if bsObj:
         pattern = post_pattern
-        all_content = bsObj.findAll("tbody", {"id": pattern})
-        url_list = []
-        for content in all_content:
-            try:
-                url = content.find("a", {"class": url_class_name})["href"]
-                if url:
-                    url = url.strip()
-                    url_list.append(url)
-            except AttributeError as e:
-                print(e)
-        return url_list
-
-
-def scrape_page_reconnect(page):  # get offer links for each page
-    url = url_head + str(page)
-    html = urlopen(url, timeout=60)
-    bsObj = BeautifulSoup(html.read(), "html5lib")
-    if bsObj:
-        pattern = thread_pattern
         all_content = bsObj.findAll("tbody", {"id": pattern})
         url_list = []
         for content in all_content:
@@ -86,8 +65,3 @@ if __name__ == "__main__":
         print(scrape_page(i, s, url_head, post_pattern, url_class_name))
     stop_time = time.time()
     print("connection: "+str(stop_time-start_time)+"\n")
-    start_time = time.time()
-    for i in range(1, 1):
-        (scrape_page_reconnect(i))
-    stop_time = time.time()
-    print("non_connection: "+str(stop_time-start_time))

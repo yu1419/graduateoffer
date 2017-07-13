@@ -29,7 +29,7 @@ def clean_result(result):
     elif "AD" in result or "ad" in result:
         return "AD"
     elif "list" in result:
-        return "Wait_list"
+        return "Wait list"
     elif "offer" in result or "Offer" in result:
         return "Offer"
     else:
@@ -61,7 +61,7 @@ def clean_degree(degree):
         return "other"
 
 
-def under_cate(under):
+def college_category(under):
     eight_list = ["清华", "北大", "科大", "浙大", "浙江大学", "中国科学技术",
                   "中国科技大学", "上海交通", "北京大学", "复旦", "华科", "华中科技",
                   "中国人民大学", "人大", "北京航空航天", "北航", "北京理工大学", "北理",
@@ -86,16 +86,8 @@ def under_cate(under):
             if item in under:
                 return "985"
         return "211"
-        return "other"
     else:
         return "other"
-
-
-def is_grad(grad):
-    if grad:
-        return True
-    else:
-        return False
 
 
 def major_category(major):
@@ -117,7 +109,8 @@ def major_category(major):
         return "Physics"
     elif "stat" in major:
         return "Stat"
-    elif "electri" in major or (len(major)<5 and "ee" in major) or "ece" in major:
+    elif "electri" in major or (len(major) < 5 and "ee" in major) or \
+            "ece" in major:
         return "EE"
     elif "envir" in major:
         return "Environment/EnvirEngi"
@@ -139,7 +132,8 @@ def major_category(major):
         return "Health"
     elif "arc" in major and "research" not in major:
         return "Architecture"
-    elif "lang" in major or "edu" in major or "stud" in major or "teach" in major:
+    elif "lang" in major or "edu" in major or "stud" in major or \
+            "teach" in major:
         return "Teaching/Edu"
     elif "design" in major:
         return "Design"
@@ -163,7 +157,8 @@ def major_category(major):
         return "TESOL"
     elif (len(major) < 5 and"me" in major) or "mecha" in major:
         return "ME"
-    elif "computer" in major or (len(major)<5 and "cs" in major) or (len(major)<5 and "ce" in major) or "cis" in major:
+    elif "computer" in major or (len(major) < 5 and "cs" in major) \
+            or (len(major) < 5 and "ce" in major) or "cis" in major:
         return "CS"
     elif "mis" in major:
         return "MIS"

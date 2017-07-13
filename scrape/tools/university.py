@@ -11,7 +11,7 @@ def get_uni_rank():
     universities["Stanford"] = ["stanford"]
     universities["MIT"] = ["massachusetts institute of technology", "mit"]
     universities["Duke"] = ["duke"]
-    universities["UPenn"] = ["university of penn", "upenn","u penn"]
+    universities["UPenn"] = ["university of penn", "upenn", "u penn"]
     universities["JHU"] = ["johns hopkins", "jhu"]
     universities["Dartmouth"] = ["dartmouth"]
     universities["Caltech"] = ["california institute", "caltech"]
@@ -58,7 +58,8 @@ def get_uni_rank():
     universities["villanova"] = ["villanova"]
     universities["OSU"] = ["osu", "ohio state"]
     universities["GWU"] = ["gwu", "george washington"]
-    universities["Washington"] = ["washington", "uw"]  # two washing check gwu first
+    universities["Washington"] = ["washington", "uw"]
+    # two washing check gwu first
     universities["SMU"] = ["methodist", "smu"]
     universities["UGA"] = ["university of georgia", "uga"]
     universities["UTexas"] = ["utexas", "austin"]
@@ -82,3 +83,17 @@ def get_uni_rank():
     universities["UMASS"] = ["umass", "amherst", "university of massachu"]
     universities["VT"] = ["vt", "virginia tech"]
     return universities
+
+universities = get_uni_rank()
+
+
+def get_school_rank(dic=universities, school=""):
+    school = school.lower()
+    for key in dic:
+        name_list = dic[key]
+        for name in name_list:
+            if name in school:
+                cleaned_school = key
+                ranking = list(dic.keys()).index(key) + 1
+                return cleaned_school, ranking
+    return None, None
