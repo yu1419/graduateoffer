@@ -3,6 +3,7 @@ import re
 import requests
 import time
 
+#  default variables for scrape 1point3acres website
 post_pattern = re.compile("normalthread_.*?")
 # normal link has a id start with normalthread
 # links stick to the top page do not have id start with normalthread
@@ -52,6 +53,7 @@ def get_tid(url):
     return str(tid)
 
 if __name__ == "__main__":
+    # default variables for scrape gter website
     url_head = ("http://bbs.gter.net/forum.php?"
                 "mod=forumdisplay&fid=49&orderby=dateline&"
                 "typeid=158&filter=author&orderby=dateline&typeid=158&page=")

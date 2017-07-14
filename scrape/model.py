@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine('mysql+pymysql://master:yusisheng123'
                        '@offer.cspfrhhjhhea.us-east-1.rds.amazonaws.com/'
                        'offer_2?charset=utf8mb4', pool_size=5, max_overflow=10,
-                       pool_timeout=30, pool_recycle=3600)
+                       pool_timeout=30, pool_recycle=3600, echo=False)
 
 Base = declarative_base()
 
@@ -18,11 +18,11 @@ Base = declarative_base()
 class All_url(Base):
     __tablename__ = 'url'
 
-    url_id = Column(Integer(), primary_key=True, autoincrement=False)
+    url_id = Column(Integer(), primary_key=True, autoincrement=True)
     url = Column(String(1000), index=True, unique=True)
     added_datetime = Column(DateTime(), default=datetime.now)
     source_site = Column(String(30))
-    source_id = Column(Integer())
+    tid = Column(Integer())
     scraped = Column(Boolean(), default=False)
 
 
@@ -64,5 +64,4 @@ class Offer(Base):
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-print(session.query(Offer).all())
 session.close()
