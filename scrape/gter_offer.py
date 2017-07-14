@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 import re
 from tools.clean_data import clean_string, clean_school, clean_result
 from tools.clean_data import clean_degree, college_category, major_category
-from multiprocessing import Process, Lock, Queue
-import codecs
 from tools.university import get_school_rank
 
 
@@ -80,7 +78,6 @@ class Gter_offer:
                                     person_id, self.source, self.sentence))
         return offer_result
 
-
     def get_person_detail(self):
         post_content = self.get_personal_info()[0]
         toefl = None
@@ -136,7 +133,10 @@ class Gter_offer:
 
 
 if __name__ == "__main__":
-    url = "http://bbs.gter.net/forum.php?mod=viewthread&tid=2096538&extra=page%3D1%26filter%3Dauthor%26orderby%3Ddateline%26typeid%3D158%26typeid%3D158%26orderby%3Ddateline"
+    url = ("http://bbs.gter.net/forum.php?"
+           "mod=viewthread&tid=2096538&extra=page%3D1%26filter%3Dauthor%26o"
+           "rderby%3Ddateline%26typeid%3D158%26typeid%3D158%26orderby%3D"
+           "dateline")
 
     from get_url import s
     html = s.get(url, timeout=60).content

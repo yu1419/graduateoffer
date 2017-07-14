@@ -14,6 +14,7 @@ from flask_mail import Mail, Message
 from form import Filter, Login_form, Register_form, Send_email, Update_passowrd
 import matplotlib as mpl
 from get_db import get_db
+import os
 mpl.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -22,7 +23,7 @@ import matplotlib.gridspec as gridspec
 db, cursor = get_db()
 major_list, univ_rank_list = get_major_univ(db, cursor)
 db.close()
-
+gmail_psw = os.environ["gmail_psw"]
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hard to guess string'
 
@@ -30,7 +31,7 @@ application.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 application.config['MAIL_PORT'] = 587
 application.config['MAIL_USE_TLS'] = True
 application.config['MAIL_USERNAME'] = "graduateoffer.get@gmail.com"
-application.config['MAIL_PASSWORD'] = "yusisheng123"
+application.config['MAIL_PASSWORD'] = gmail_psw
 
 
 login_manager = LoginManager()

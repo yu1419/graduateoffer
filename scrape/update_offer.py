@@ -120,7 +120,7 @@ def update_all_offer():
             task = []
             for i in range(N):
                 task.append(Process(target=update_one_offer,
-                                         args=(url_q,l,)))
+                                    args=(url_q,l,)))
             for p in task:
                 p.start()
             for p in task:

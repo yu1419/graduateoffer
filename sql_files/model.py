@@ -5,9 +5,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
+psw = os.environ["aws_mysql_password"]
 
-engine = create_engine('mysql+pymysql://master:yusisheng123'
+engine = create_engine('mysql+pymysql://master:'+psw+
                        '@offer.cspfrhhjhhea.us-east-1.rds.amazonaws.com/'
                        'offer_2?charset=utf8mb4', pool_size=5, max_overflow=10,
                        pool_timeout=30, pool_recycle=3600)
