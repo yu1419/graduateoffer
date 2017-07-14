@@ -4,7 +4,7 @@ from get_db import get_db
 from multiprocessing import Process, Lock, Queue
 
 
-N = 1 # processes
+N = 1 # process
 
 def update_point_offer(url, cursor, db, lock):
     try:

@@ -87,7 +87,7 @@ def get_uni_rank():
 universities = get_uni_rank()
 
 
-def get_school_rank(dic=universities, school=""):
+def get_school_rank(school, dic=universities):
     school = school.lower()
     for key in dic:
         name_list = dic[key]

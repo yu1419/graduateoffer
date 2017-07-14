@@ -41,7 +41,7 @@ def clean_degree(degree):
     result = ("".join(degree)).lower()
     if "mar" in result:
         return "Master"
-    elif "jd" in result or "llm" in result:
+    elif "jd" in result or "llm" in result and "fallm" not in result:
         return "JD/LLM"
     elif "msw" in result:
         return "Master"

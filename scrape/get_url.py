@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     url_class_name = "xst"  # url exsit in url_class_name <a>
     start_time = time.time()
-    for i in range(1, 10):
+    for i in range(1, 2):
         print(scrape_page(i, s, url_head, post_pattern, url_class_name))
     stop_time = time.time()
     print("connection: "+str(stop_time-start_time)+"\n")
