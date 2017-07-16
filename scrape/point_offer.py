@@ -6,8 +6,9 @@ from tools.university import get_school_rank
 
 
 class Point_offer:
-    def __init__(self, html_content):
+    def __init__(self, html_content, url):
         self.html_content = html_content
+        self.url=url
         self.bsObj = None
         self.first_post = None
         self.title = None
@@ -65,7 +66,8 @@ class Point_offer:
                 clean_univ.append(clean_u)
                 rank_list.append(ranking)
         return major, major_cate, degree, university, result, \
-            offer_time, clean_univ, rank_list, person_id, self.sentence
+            offer_time, clean_univ, rank_list, person_id, \
+            self.sentence, self.url, self.source
 
     def get_info_list(self):
         all_list = self.first_post.findAll("li")
@@ -94,7 +96,7 @@ class Point_offer:
             if "其他说明" in text:
                 comment = get_app_background(text)
                 comment = clean_string(comment)
-        return gpa, toefl, gre, aw, under_cate, comment, person_id, comment
+        return gpa, toefl, gre, aw, under_cate, comment, person_id, self.source
 
 
 def get_gpa(text):

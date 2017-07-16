@@ -6,7 +6,8 @@ from tools.university import get_school_rank
 
 
 class Gter_offer:
-    def __init__(self, html_content):
+    def __init__(self, html_content, url):
+        self.url = url
         self.offer_pattern = re.compile("offer.*?")
         self.personal_pattern = "个人情况"
         self.id_pattern = re.compile("http://bbs.gter.net/space-uid.*?")
@@ -29,7 +30,14 @@ class Gter_offer:
 
     def get_id(self):
         person_id = self.bsObj.findAll("a", {"href": self.id_pattern})[0]
-        return person_id.getText()
+        if person_id:
+            result = person_id.getText()
+            if len(result) > 1:
+                return result
+            else:
+                return "Anonymous"
+        else:
+            return "Anonymous"
 
     def get_offer_list(self):
         return self.bsObj.findAll("table", {"summary": self.offer_pattern})
@@ -75,7 +83,8 @@ class Gter_offer:
                 major_cate = major_category(major)
                 offer_result.append((university, degree, major, major_cate,
                                     result, noti_date, clean_univ, ranking,
-                                    person_id, self.source, self.sentence))
+                                    person_id, self.source, self.sentence,
+                                    self.url, self.source))
         return offer_result
 
     def get_person_detail(self):
@@ -84,7 +93,7 @@ class Gter_offer:
         gre = None
         gre_aw = None
         under_grad = None
-        college_categorygory = None
+        college_type = None
         major = None
         gpa = None
         comment = None
@@ -112,7 +121,7 @@ class Gter_offer:
                         gre_aw = float(gre_list[len(gre_list)-1])
             if "本科学校" in str(item):
                 under_grad = clean_string(item.td.getText())
-
+                college_type = college_category(under_grad)
             if "本科专业" in str(item):
                 major = clean_string(item.td.getText())
             if "本科成绩" in str(item):
@@ -126,10 +135,9 @@ class Gter_offer:
                 comment = item.td
                 if comment:
                     comment = clean_string(comment.getText())
-            college_categorygory = college_category(under_grad)
 
-        return toefl, gre, gre_aw, under_grad, college_categorygory, major,\
-            gpa, comment, person_id
+        return toefl, gre, gre_aw, under_grad, college_type,\
+            gpa, comment, person_id, self.source
 
 
 if __name__ == "__main__":

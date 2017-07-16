@@ -31,12 +31,12 @@ url_class_name_g = "xst"  # url exsit in url_class_name <a>
 
 def check_exit(s, tid, source):
     result = s.query(All_url).filter(All_url.tid == tid and
-                                     All_url.source_site == source).count()
+                                     All_url.source == source).count()
     return result != 0
 
 
 def add_url(s, url, source, tid):
-    c_url = All_url(url=url, source_site=source, tid=tid)
+    c_url = All_url(url=url, source=source, tid=tid)
     s.add(c_url)
     s.commit()
 
@@ -73,10 +73,10 @@ def update_gter():
 
 
 def update_all():
-    #t1 = threading.Thread(target=update_point)
-    t2 = threading.Thread(target=update_gter)
-    #t1.start()
-    t2.start()
+
+    update_gter()
+    update_point()
+
 
 
 if __name__ == "__main__":
