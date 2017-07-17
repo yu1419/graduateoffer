@@ -175,7 +175,7 @@ def update_one_offer(session, lock, html_q):
             else:
                 update_point_offer(html, url, session, lock)
         else:
-            print("empty:" + str(eampty))
+            logging.info("empty:" + str(eampty))
             eampty += 1
             sleep(EAMPTY_HTML_SLEEP_TIME)
             if eampty > EAMPTY_HTML_OCCUR_TIMES:
@@ -189,7 +189,7 @@ def get_html(s, html_q, url_q):
             html = s.get(url, timeout=50).content
             html_q.put((html, url, source))
         else:
-            print("all url has been passed to html")
+            logging.info("all url has been passed to html")
             break
 
 
@@ -197,14 +197,14 @@ def update_all_offer():
     add_offer = True
     sql_session = Session()
     while add_offer:
-        print("new session--------------------")
+        logging.info("new session--------------------")
 
         sql_session.commit()
         url_list = sql_session.query(All_url).\
             filter(All_url.scraped == False).\
             limit(100)
         if url_list.count() == 0:
-            print("no url sleep available")
+            logging.info("no url sleep available")
         else:
             html_q = Queue()
             url_q = Queue()
@@ -230,7 +230,7 @@ def update_all_offer():
             for i in sql_session_list:
                 i.close()
 
-            print("finished 1000 or all")
+            logging.info("finished 1000 or all")
 
 
 if __name__ == "__main__":
