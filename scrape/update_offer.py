@@ -82,8 +82,6 @@ def update_point_offer(html_content, url, session, lock):
         finally:
             lock.release()
 
-        #
-
 
 def update_gter_offer(html, url, session, lock):
     try:
@@ -195,42 +193,49 @@ def get_html(s, html_q, url_q):
 
 def update_all_offer():
     add_offer = True
-    sql_session = Session()
+
     while add_offer:
-        logging.info("new session--------------------")
+        try:
+            sql_session = Session()
+            logging.info("new session--------------------")
 
-        sql_session.commit()
-        url_list = sql_session.query(All_url).\
-            filter(All_url.scraped == False).\
-            limit(100)
-        if url_list.count() == 0:
-            logging.info("no url sleep available")
-        else:
-            html_q = Queue()
-            url_q = Queue()
-            l = Lock()
-            for url in url_list:
-                url_q.put((url.url, url.source))
-            task = []
-            for i in range(N_URL_TO_HTML):
-                s = requests.Session()
-                task.append(Process(target=get_html,
-                                    args=(s, html_q, url_q)))
-            sql_session_list = []
-            for i in range(N_ADD_DATABASE):
-                sql_session_list.append(Session())
+            sql_session.commit()
+            url_list = sql_session.query(All_url).\
+                filter(All_url.scraped == False).\
+                limit(100)
+            if url_list.count() == 0:
+                logging.info("scraped all available urls")
+                return
+            else:
+                html_q = Queue()
+                url_q = Queue()
+                l = Lock()
+                for url in url_list:
+                    url_q.put((url.url, url.source))
+                task = []
+                for i in range(N_URL_TO_HTML):
+                    s = requests.Session()
+                    task.append(Process(target=get_html,
+                                        args=(s, html_q, url_q)))
+                sql_session_list = []
+                for i in range(N_ADD_DATABASE):
+                    sql_session_list.append(Session())
 
-                task.append(Process(target=update_one_offer,
-                                    args=(sql_session_list[i], l, html_q)))
-            for p in task:
-                p.start()
+                    task.append(Process(target=update_one_offer,
+                                        args=(sql_session_list[i], l, html_q)))
+                for p in task:
+                    p.start()
 
-            for p in task:
-                p.join(PROCESS_TIMEOUT)
-            for i in sql_session_list:
-                i.close()
+                for p in task:
+                    p.join(PROCESS_TIMEOUT)
+                for i in sql_session_list:
+                    i.close()
+                logging.info("finished 1000 or all")
+        except Exception as e:
+            logging.debug("erro in mysql get url :" + str(e))
+        finally:
 
-            logging.info("finished 1000 or all")
+            sql_session.close()
 
 
 if __name__ == "__main__":
