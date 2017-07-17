@@ -2,7 +2,14 @@ from get_url import scrape_page, get_tid
 import re
 from model import Session, All_url
 import threading
-N = 300
+import logging
+N = 100
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(filename)s\
+                    [line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename='update_url.log',
+                    filemode='a')
 
 #  default variables for scrape 1point3acres website
 
@@ -42,13 +49,14 @@ def add_url(s, url, source, tid):
 
 
 def update_url(s, url_head, post_pattern, url_class_name, source):
-    page = 1
+    page = 136
     old_url = 0
     tid = 0
     while old_url < N:
         try:
             url_list = scrape_page(page, s, url_head,
                                    post_pattern, url_class_name)
+            logging.info('scrape url in ' + source + ":page-" + str(page))
             for url in url_list:
                 tid = get_tid(url)
                 if check_exit(s, tid, source):
@@ -73,8 +81,7 @@ def update_gter():
 
 
 def update_all():
-
-    update_gter()
+    #update_gter()
     update_point()
 
 

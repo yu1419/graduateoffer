@@ -103,6 +103,4 @@ session = Session()
 session.close()
 
 if __name__ == "__main__":
-    session = Session()
-    a = session.query(Applicant).filter(Applicant.applicant_id == 36).first()
-    print(len(a.offers))
+    print("model")

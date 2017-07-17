@@ -4,14 +4,27 @@ from multiprocessing import Process, Lock, Queue
 from model import Session, All_url, Applicant, Offer, update_version
 from time import sleep
 import requests
-N_url_to_html = 4  # process
-N_add_database = 1
+import logging
+
+
+PROCESS_TIMEOUT = 60*4
+
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(filename)s\
+                    [line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename='update_offer.log',
+                    filemode='a')
+
+N_URL_TO_HTML = 4  # process
+N_ADD_DATABASE = 14
+EAMPTY_HTML_SLEEP_TIME = 5
+EAMPTY_HTML_OCCUR_TIMES = 3
 
 
 def update_point_offer(html_content, url, session, lock):
     try:
         p = Point(html_content, url)
-        print(url)
         major, major_cate, degree, university, result, \
             offer_time, clean_univ, rank_list, person_id, \
             sentence, url, source = p.get_offer()
@@ -25,14 +38,12 @@ def update_point_offer(html_content, url, session, lock):
             session.add(applicant)
             try:
                 lock.acquire()
-                print("add applican")
                 session.commit()
                 applicant_id = applicant.applicant_id
             except Exception as e:
-                print(e)
+                logging.debug('erro in offer ' + url + ":" + str(e))
                 #
             finally:
-                print("add applican sucess")
                 lock.release()
         else:
             applicant_id = exist_id
@@ -48,26 +59,29 @@ def update_point_offer(html_content, url, session, lock):
             session.add(offer)
             try:
                 lock.acquire()
-                print("add offer")
                 session.commit()
             except Exception as e:
-                print(e)
+                logging.debug('erro in offer ' + url + ":" + str(e))
                 #
             finally:
-                print("add offer sucess")
+                logging.info('in offer ' + url +
+                             ":" + "add offer sucess")
                 lock.release()
-            current_url = session.query(All_url).filter(All_url.url==url).first()
-            print("update url scraped")
-            current_url.scraped = True
-            try:
-                lock.acquire()
-                session.commit()
-            except Exception as e:
-                print(e)
-            finally:
-                lock.release()
+
     except Exception as e:
-        print(e)
+        logging.debug('erro in offer ' + url + ":" + str(e))
+    finally:
+        current_url = session.query(All_url).\
+            filter(All_url.url == url).first()
+        current_url.scraped = True
+        try:
+            lock.acquire()
+            session.commit()
+        except Exception as e:
+            logging.debug('erro in offer ' + url + ":" + str(e))
+        finally:
+            lock.release()
+
         #
 
 
@@ -85,23 +99,25 @@ def update_gter_offer(html, url, session, lock):
             exist_id = update_version(session, applicant)
             if not exist_id:
                 session.add(applicant)
-            session.add(applicant)
-            try:
-                lock.acquire()
-                session.commit()
-                applicant_id = applicant.applicant_id
-                if person_id == "Anonymous":
-                    applicant.person_id = person_id + str(applicant_id)
-            except Exception as e:
-                print(e)
-            finally:
-                lock.release()
+                try:
+                    lock.acquire()
+                    session.commit()
+                    applicant_id = applicant.applicant_id
+                    if person_id == "Anonymous":
+                        applicant.person_id = person_id + str(applicant_id)
+                        person_id = applicant.person_id
+                except Exception as e:
+                    logging.debug('erro in offer ' + url + ":" + str(e))
+                finally:
+                    lock.release()
+            else:
+                applicant_id = exist_id
         except Exception as e:
-            print(e)
+            logging.debug('erro in offer ' + url + ":" + str(e))
             #
         if not applicant_id:
-            print("no id, return")
-            return
+            logging.debug('erro in offer ' + url + ":" + "no app_id")
+            offer_list = []
         offer_list = g.get_offer_info()
         for offer_detail in offer_list:
             try:
@@ -120,53 +136,56 @@ def update_gter_offer(html, url, session, lock):
                     lock.acquire()
                     session.commit()
                 except Exception as e:
-                    print(e)
+                    logging.debug('erro in offer ' + url + ":" + str(e))
                     #
                 finally:
                     lock.release()
-                current_url = session.query(All_url).\
-                    filter(All_url.url==url).first()
-                current_url.scraped = True
-                try:
-                    lock.acquire()
-                    session.commit()
-                except Exception as e:
-                    print(e)
-                finally:
-                    lock.release()
+                logging.info('in offer ' + url +
+                             ":" + "add offer sucess")
 
             except Exception as e:
-                print(e)
+                logging.debug('erro in offer ' + url + ":" + str(e))
                 #
     except Exception as e:
-        print(e)
+        logging.debug('erro in offer ' + url + ":" + str(e))
+
+    finally:
+        current_url = session.query(All_url).\
+            filter(All_url.url == url).first()
+        current_url.scraped = True
+        try:
+            lock.acquire()
+            session.commit()
+        except Exception as e:
+            logging.debug('erro in offer ' + url + ":" + str(e))
+        finally:
+            lock.release()
+
         #
 
 
 def update_one_offer(session, lock, html_q):
     eampty = 0
-    print("stuck 1")
     while True:
-        print("stuck 2")
         if not html_q.empty():
-            print("update offer")
-            html, url, source = html_q.get()
+            eampty = 0
+            html, url, source = html_q.get(timeout=10)
             if source == "gter":
                 update_gter_offer(html, url, session, lock)
             else:
                 update_point_offer(html, url, session, lock)
         else:
-            print("emapty:" + str(eampty))
+            print("empty:" + str(eampty))
             eampty += 1
-            sleep(1)
-            if eampty > 10:
+            sleep(EAMPTY_HTML_SLEEP_TIME)
+            if eampty > EAMPTY_HTML_OCCUR_TIMES:
                 break
 
 
 def get_html(s, html_q, url_q):
     while True:
         if not url_q.empty():
-            url, source = url_q.get()
+            url, source = url_q.get(timeout=10)
             html = s.get(url, timeout=50).content
             html_q.put((html, url, source))
         else:
@@ -183,9 +202,8 @@ def update_all_offer():
         sql_session.commit()
         url_list = sql_session.query(All_url).\
             filter(All_url.scraped == False).\
-            limit(20)
+            limit(100)
         if url_list.count() == 0:
-            print("no url sleep")
             print("no url sleep available")
         else:
             html_q = Queue()
@@ -194,20 +212,24 @@ def update_all_offer():
             for url in url_list:
                 url_q.put((url.url, url.source))
             task = []
-            for i in range(N_url_to_html):
+            for i in range(N_URL_TO_HTML):
                 s = requests.Session()
                 task.append(Process(target=get_html,
                                     args=(s, html_q, url_q)))
-            for i in range(N_add_database):
+            sql_session_list = []
+            for i in range(N_ADD_DATABASE):
+                sql_session_list.append(Session())
 
                 task.append(Process(target=update_one_offer,
-                                    args=(sql_session, l, html_q)))
+                                    args=(sql_session_list[i], l, html_q)))
             for p in task:
                 p.start()
-            print("start all")
+
             for p in task:
-                p.join()
-            print("stop all")
+                p.join(PROCESS_TIMEOUT)
+            for i in sql_session_list:
+                i.close()
+
             print("finished 1000 or all")
 
 
