@@ -49,7 +49,7 @@ def add_url(s, url, source, tid):
 
 
 def update_url(s, url_head, post_pattern, url_class_name, source):
-    page = 136
+    page = 1
     old_url = 0
     tid = 0
     while old_url < N:

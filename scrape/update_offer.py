@@ -20,6 +20,7 @@ N_URL_TO_HTML = 4  # process
 N_ADD_DATABASE = 14
 EAMPTY_HTML_SLEEP_TIME = 5
 EAMPTY_HTML_OCCUR_TIMES = 3
+ZERO_URL_CHECK_TIME = 3
 
 
 def update_point_offer(html_content, url, session, lock):
@@ -193,6 +194,7 @@ def get_html(s, html_q, url_q):
 
 def update_all_offer():
     add_offer = True
+    zero_url = 0
 
     while add_offer:
         try:
@@ -204,8 +206,13 @@ def update_all_offer():
                 filter(All_url.scraped == False).\
                 limit(100)
             if url_list.count() == 0:
+                zero_url = 1 + zero_url
                 logging.info("scraped all available urls")
-                return
+                if zero_url > ZERO_URL_CHECK_TIME:
+                    return
+                else:
+                    sleep(40)
+                    continue
             else:
                 html_q = Queue()
                 url_q = Queue()
