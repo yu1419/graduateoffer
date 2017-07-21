@@ -5,17 +5,17 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-
+from . import db
+"""
 engine = create_engine('mysql+pymysql://master:yusisheng123'
                        '@offer.cspfrhhjhhea.us-east-1.rds.amazonaws.com/'
                        'offer_2?charset=utf8', pool_size=5, max_overflow=5,
                        pool_timeout=30, pool_recycle=3600, echo=False)
 
 Base = declarative_base()
+"""
 
-
-class All_url(Base):
+class All_url(db.Model):
     __tablename__ = 'url'
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
                       'mysql_collate': 'utf8_general_ci'}
@@ -27,7 +27,7 @@ class All_url(Base):
     scraped = Column(Boolean(), default=False)
 
 
-class Applicant(Base):
+class Applicant(db.Model):
     __tablename__ = "applicant"
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
                       'mysql_collate': 'utf8_general_ci'}
@@ -43,12 +43,8 @@ class Applicant(Base):
     version = Column(Integer(), default=1)
     updated_time = Column(DateTime(), default=datetime.now)
 
-    def offer_cout(self, session):
-        return session.query(Offer).filter(Offer.applicant_id ==
-                                           self.applicant_id).count()
 
-
-class Offer(Base):
+class Offer(db.Model):
     __tablename__ = "offer"
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
                       'mysql_collate': 'utf8_general_ci'}
@@ -96,11 +92,11 @@ def update_version(session, applicant):
 
         return app.one().applicant_id
 
-
+"""
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 session.close()
-
+"""
 if __name__ == "__main__":
     print("model")

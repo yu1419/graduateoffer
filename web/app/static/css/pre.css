@@ -1,0 +1,174 @@
+/*CSS For common appearance*/
+body {
+ min-height:100vh;
+ background-color: hsla(210, 50%, 35%, 0.1);
+}
+.hide{
+  display:none;
+}
+#followed_users{
+  display:none;
+}
+#follower_users{
+  display: none;
+}
+
+.followed_count{
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.follower_count{
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4.0em;
+  font-size: 1.5em;
+}
+
+.good{
+  font-size: 1.5em;
+  }
+.user_profile_link{
+  font-size: 3.0em;
+}
+.home_profile{
+  margin-right: 5.0em;
+  font-size: 3.0em;
+}
+.bad{
+  background: yellow;
+  font-size: 3.0em;
+  color: red;
+}
+  .reply_to_name{
+  border:None;
+}
+.forgot_password_link{
+
+}
+.reply_to_line:hover{
+  color: red;
+  border-width: 0.1px;
+}
+.reply_to_line{
+  margin-left: 4.0em;
+  color: black;
+  border-radius: 0.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  border-style: solid;
+  border-width: 0.1px;
+}
+.reply_to_line:hover{
+  cursor: pointer;
+}
+
+.reply_to_username {
+  color: hsla(239, 90%, 61%,1);
+}
+.single_comment:hover{
+  background-color: hsla(206, 90%, 61%,0.2);
+}
+.single_comment:hover .post_reply{
+  text-align: right;
+  display: block;
+  font-weight: bold;
+  margin-right: 3.0em;
+}
+.single_comment:hover .post_reply:hover{
+  color: hsla(32, 9%, 6%,0.2);
+  cursor: pointer;
+}
+
+.post_reply{
+  display: None;
+}
+.pre_content:hover{
+  height: 8.0em;
+}
+h1{
+  color: Black;
+}
+body {
+ min-height:100vh;
+ background-color: hsla(210, 50%, 35%, 0.1);
+}
+.page_div{
+  background-color: hsla(45, 14%, 40%, 0.1);
+  min-height:70vh;
+}
+.comment{
+	margin-left: 5%;
+	margin-top: 5.0em;
+  margin-bottom: 5.0em;
+}
+.post_content{
+  border-radius: 1.5em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  font-size: 1.4em;
+  background-color: hsla(0,0%,0%, 0.1);
+}
+.single_comment{
+  width: 60%;
+  border-radius: 3.0em;
+  background-color: hsla(0,0%,75%,0.3);
+  padding-left: 1.7em;
+  padding-left: 1.7em;
+	margin-top: 1.0em;
+}
+.footer{
+	text-align: center;
+}
+.replied_author_link{
+	color: green;
+}
+.author_link{
+	color: RED;
+}
+.pre_time{
+	font-size: 0.8em;
+	text-align: right;
+	margin-bottom:0.5em;
+}
+.comment_time{
+	font-size: 0.8em;
+}
+.comment_author{
+	font-size: 1.5em;
+}
+.pre_blog{
+  border-radius: 2.0em;
+  padding-left: 2.0em;
+  padding-right: 2.0em;
+	align-content: center;
+	background-color: hsla(40, 100%, 50%, 0.3);
+  width: 90%;
+  margin-bottom: 1.0em;
+}
+.unfollow_link{
+	color: grey;
+}
+.follow_link{
+	color: green;
+}
+.pre_title {
+    font-size: 3.0em;
+    margin-left: 0px;
+}
+
+.pre_author {
+	  text-align: right;
+    font-size: 1.0em;
+}
+
+.pre_content{
+    font-size: 1.0em;
+    height: 3.0em;
+    overflow: hidden;
+}
+.single_form{
+	width: 50%;
+	min-height:60vh;
+}
