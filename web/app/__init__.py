@@ -4,7 +4,7 @@ import os
 from flask_bootstrap import Bootstrap
 from flaskext.markdown import Markdown
 import markdown
-from flask import Markup
+from flask import Markup, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 
@@ -13,6 +13,12 @@ login_manager = LoginManager()
 mail = Mail()
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+
+
+def url_for_other_page(page):
+    args = request.args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
 
 
 def create_app():
@@ -27,6 +33,7 @@ def create_app():
     mysql_host = os.environ.get('aws_mysql_host')
     mysql_password = os.environ.get('aws_mysql_password')
     app.config['SECRET_KEY'] = 'hard to guess string'
+    app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 
     app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://master:" + mysql_password + "@" + mysql_host + "offer_2?charset=utf8"

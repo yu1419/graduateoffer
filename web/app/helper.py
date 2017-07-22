@@ -2,6 +2,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from threading import Thread
 from flask import current_app
 from .model import Offer, Applicant
+from sqlalchemy.sql.expression import and_, distinct
+from math import ceil
+from sqlalchemy import desc, asc
 
 
 def get_sum_offer(db):
@@ -19,6 +22,77 @@ def get_applicant(db, applicant_id):
     return db.session.query(Applicant).\
          filter(Applicant.applicant_id == applicant_id).first()
 
+
+def get_app_offer_count(db, person_id):
+    result = db.session.query(distinct(Offer.univ_rank)).\
+        filter(and_(Offer.person_id ==
+               person_id, Offer.univ_rank != None)).count()
+
+    return result
+
+
+def get_app_offer_count_from_dict(db, data):
+    for item in data:
+
+        item["RESULTS"] = get_app_offer_count(db, (item["USER ID"]))
+
+
+def form_table_data(db, result):
+    data = []
+    for x in result:
+        data.append(x._asdict())
+    get_app_offer_count_from_dict(db, data)
+    return data
+
+
+def get_all_univ_name(db):
+    result = db.session.query(Offer.univ_rank.label("univ_rank"),
+                              Offer.univ_name.label("univ_name")).\
+                              filter(Offer.univ_rank != None).\
+                              order_by(asc("univ_rank")).distinct().all()
+    return result
+
+
+def convert_string_to_bool(filter_type):
+    if (type(filter_type)) == type(""):
+        if filter_type == "False":
+            filter_type = False
+        else:
+            filter_type = True
+    return filter_type
+
+
+class Pagination(object):
+
+    def __init__(self, page, per_page, total_count):
+        self.page = page
+        self.per_page = per_page
+        self.total_count = total_count
+
+    @property
+    def pages(self):
+        return int(ceil(self.total_count / float(self.per_page)))
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages
+
+    def iter_pages(self, left_edge=2, left_current=2,
+                   right_current=5, right_edge=2):
+        last = 0
+        for num in range(1, self.pages + 1):
+            if num <= left_edge or \
+               (num > self.page - left_current - 1 and \
+                num < self.page + right_current) or \
+               num > self.pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
 
 """
 def send_async_email(app, mail, msg):

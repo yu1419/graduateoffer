@@ -4,7 +4,7 @@ from wtforms.validators import Required, Optional, Email, Length
 
 
 class Filter(FlaskForm):
-    result  = SelectField(u'Result', choices=[('All','All'), ('Offer', 'Offer'),
+    """result  = SelectField(u'Result', choices=[('All','All'), ('Offer', 'Offer'),
                           ('AD', 'AD'), ('Rejection', 'Rejection'),
                           ('Wait_list', 'Wait_list'),
                           ('Other', 'Other')], id="result")
@@ -17,7 +17,7 @@ class Filter(FlaskForm):
                               choices=[('All', 'All'), ('985', '985'),
                                        ('211', '211'), ('Abroad', 'Abroad'),
                                        ('other', 'other')], id="under")
-    major = SelectField(u'Major', id="major")
+    #major = SelectField(u'Major', id="major")
     count_per_page = SelectField(u'Count per page',
                                  choices=[('10', '10'), ('20', '20'),
                                           ('30', '30')],
@@ -27,7 +27,7 @@ class Filter(FlaskForm):
                                 ('gpa', 'GPA'), ('toefl', 'TOEFL'), ('gre', 'GRE'),
                                 ('gre_aw', 'GRE AW')], id="sort")
     order = RadioField(choices=[('DESC', 'decrease'), ('ASC', 'increase')],
-                       default='DESC')
+                       default='DESC')"""
 
     submit = SubmitField('Search', id="SubmitButton")
 

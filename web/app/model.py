@@ -6,14 +6,14 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from . import db
-"""
+
 engine = create_engine('mysql+pymysql://master:yusisheng123'
                        '@offer.cspfrhhjhhea.us-east-1.rds.amazonaws.com/'
                        'offer_2?charset=utf8', pool_size=5, max_overflow=5,
                        pool_timeout=30, pool_recycle=3600, echo=False)
 
 Base = declarative_base()
-"""
+
 
 class All_url(db.Model):
     __tablename__ = 'url'
@@ -42,6 +42,16 @@ class Applicant(db.Model):
     source = Column(String(10))
     version = Column(Integer(), default=1)
     updated_time = Column(DateTime(), default=datetime.now)
+
+
+class Visitor(db.Model):
+    __tablename__ = "visitor"
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
+                      'mysql_collate': 'utf8_general_ci'}
+    applicant_id = Column(Integer(), primary_key=True, autoincrement=True)
+    ip = Column(String(100))
+    visit_time = Column(DateTime(), default=datetime.now)
+
 
 
 class Offer(db.Model):
@@ -92,11 +102,14 @@ def update_version(session, applicant):
 
         return app.one().applicant_id
 
+
 """
-Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-session.close()
 """
 if __name__ == "__main__":
-    print("model")
+    applicant = Applicant(gpa=1, toefl=2, gre=3, gre_aw=4,
+                          college_type="985", comment="hello",
+                          person_id="nicole6927", source="point")
+
+    print(update_version(session, applicant))

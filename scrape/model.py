@@ -78,6 +78,7 @@ def update_version(session, applicant):
     app = session.query(Applicant).\
         filter((Applicant.person_id == applicant.person_id) &
                (Applicant.source == applicant.source))
+    print(app.count())
     if app.count() == 0:
         return None
     else:
@@ -97,10 +98,23 @@ def update_version(session, applicant):
         return app.one().applicant_id
 
 
+
+class Visitor(Base):
+    __tablename__ = "visitor"
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
+                      'mysql_collate': 'utf8_general_ci'}
+    applicant_id = Column(Integer(), primary_key=True, autoincrement=True)
+    ip = Column(String(100))
+    visit_time = Column(DateTime(), default=datetime.now)
+
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-session.close()
+
 
 if __name__ == "__main__":
-    print("model")
+    applicant = Applicant(gpa=1, toefl=2, gre=3, gre_aw=4,
+                          college_type="985", comment="hello",
+                          person_id="nicole6927", source="point")
+
+    print(update_version(session, applicant))

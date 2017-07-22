@@ -1,20 +1,30 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "page.html" as paging %}
-{% block title %}Rank Result{% endblock %}
+{% block title %}University Rank Search{% endblock %}
 {% block page_content %}
 {{super()}}
 <div class="page-header">
-    <h1>University Rank Search Result</h1>
+    <h1>{{title}}</h1>
 </div>
 <div style="width: 10%">
 </div>
 <div class="form-inline">
+
+{% if form %}
+<div class="form-inline">
+{{ wtf.quick_form(form) }}
 </div>
-<p><b>{{total}}</b> results match your search!</p>
+{% endif %}
+</div>
+<p>
+{% if total %}
+<b>{{total}}</b> results match your search!
+{% endif %}
+</p>
 
 
-<table class="table table-striped">
+<table class="table table-hover">
   <tr>
     <th>ROW</th>
   {% for col in column_list %}
@@ -28,15 +38,17 @@
   {% if r.append(r.pop() + 1) %}{% endif %} 
   <td>{{r[0]}}</td>
   {% for col in column_list %}
-    <td>{% if col == "PERSON ID" %}
-    <a href="/applicant/{{row["PERSON ID"]}}">{{row["PERSON ID"]}}</a>
+    <td>{% if col == "USER ID" %}
+    <a href="/applicant/{{row["USER ID"]}}">{{row["USER ID"]}}</a>
     {% elif col == "SOURCE" %}
     <a href={{row["URL"]}}>{{row["SOURCE"]}}</a>
     {% else %}{{row[col]}}{% endif %}</td>
   {% endfor %}
-  
   </tr>
   {% endfor %}
   {% endif %}
 </table>
+{% if pagination %}
+{{paging.render_pagination(pagination)}}
+{% endif %}
 {% endblock %}

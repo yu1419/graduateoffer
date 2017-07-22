@@ -1,33 +1,39 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, IntegerField, BooleanField, PasswordField, RadioField
+from wtforms import (StringField, SubmitField, SelectField,
+                     SelectMultipleField, IntegerField, BooleanField,
+                     PasswordField, RadioField, FloatField)
 from wtforms.validators import Required, Optional, Email, Length
 
 
 class Filter(FlaskForm):
-    result  = SelectField(u'Result', choices=[('All','All'), ('Offer', 'Offer'),
-                          ('AD', 'AD'), ('Rejection', 'Rejection'),
-                          ('Wait_list', 'Wait_list'),
-                          ('Other', 'Other')], id="result")
-    degree  = SelectField(u'Degree', choices=[('All','All'), ('Master', 'Master'),
-                          ('PhD', 'PhD'), ('JD/LLM', 'JD/LLM')], id="degree")
-    start = IntegerField("Ranking:", default=1, id="start")
-    stop = IntegerField("-", default=78, id="stop")
+    result = SelectField(u'Result', choices=[('', 'All'), ('Offer', 'Offer'),
+                         ('AD', 'AD'), ('Rejection', 'Rejection'),
+                         ('Wait list', 'Wait list')], id="result")
+    degree = SelectField(u'Degree', choices=[('', 'All'),
+                         ('Master', 'Master'),
+                         ('PhD', 'PhD'), ('JD/LLM', 'JD/LLM')], id="degree")
+    min_rank = IntegerField("Univ Rank:", default=1, id="min_rank")
+    max_rank = IntegerField("-", default=78, id="max_rank")
 
-    under_cater = SelectField(u'Applicant Undergraduate School',
-                              choices=[('All', 'All'), ('985', '985'),
-                                       ('211', '211'), ('Abroad', 'Abroad'),
-                                       ('other', 'other')], id="under")
+    filter_gpa = BooleanField('Filter GPA', default=False, id="filter_gpa")
+    min_gpa = FloatField("GPA:", default=2.0, id="min_gpa")
+    max_gpa = FloatField("-", default=100, id="max_gpa")
+
+    filter_toefl = BooleanField('Filter TOEFL', default=False,
+                                id="filter_toefl")
+    min_toefl = IntegerField("TOEFL:", default=70, id="min_toefl")
+    max_toefl = IntegerField("-", default=120, id="max_toefl")
+
+    college_type = SelectField(u'College Type',
+                               choices=[('', 'All'), ('985', '985'),
+                                        ('211', '211'), ('Abroad', 'Abroad')],
+                               default="",
+                               id="college")
     major = SelectField(u'Major', id="major")
-    count_per_page = SelectField(u'Count per page',
-                                 choices=[('10', '10'), ('20', '20'),
-                                          ('30', '30')],
-                                 id="count")
     sort = SelectField(u'Sorted by',
-                       choices=[('received_date','Date'), ('ranking', 'Ranking'),
-                                ('gpa', 'GPA'), ('toefl', 'TOEFL'), ('gre', 'GRE'),
-                                ('gre_aw', 'GRE AW')], id="sort")
-    order = RadioField(choices=[('DESC', 'decrease'), ('ASC', 'increase')],
-                       default='DESC')
+                       choices=[('received_date', 'Received Date'),
+                                ('rank', 'Rank'),
+                                ('gpa', 'GPA'), ('toefl', 'TOEFL')], id="sort")
 
     submit = SubmitField('Search', id="SubmitButton")
 
