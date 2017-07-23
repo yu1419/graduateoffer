@@ -6,8 +6,17 @@
 {{ super() }}
 <meta name="google-site-verification" content="XkUVI76rPeXT9ms8fMTOFWkCfGm3y9PXzlCUm4Jzkzs" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block stylesheet %}
+        <link href="{{ url_for('static', filename='css/pre.css') }}" rel="stylesheet">
+{% endblock %}
+
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 {% endblock %}
 
 {% block navbar %}
@@ -109,7 +118,7 @@
             }
 
     </style>
-<div class="container">
+<div class="container" id="body_container">
     {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -124,10 +133,15 @@
 </br>
 </div>
 {% block footer %}
-<div class = "footer">
-  <p>Credit to all the users who shared their information on and my girlfriend Simin.<a href="http://bbs.gter.net/">Gter</a>  and <a href="http://www.1point3acres.com/bbs/">1point3acres</a> .Contact information: <a href="mailto:graduateoffer.get@gmail.com">
-  graduateoffer.get@gmail.com</a>.</p>
-</div>
+    <div class="footer container">
+        <div>
+            <div> Credit to all the users who shared their information on <a href="http://bbs.gter.net/">Gter</a>  and <a href="http://www.1point3acres.com/bbs/">1point3acres</a> and my girlfriend Simin..Contact information: <a href="mailto:graduateoffer.get@gmail.com">
+              graduateoffer.get@gmail.com</a>.
+        </div>
+    </div>
+      
+      
+    </div>
 {% endblock %}
 
 {% endblock %}

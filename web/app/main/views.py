@@ -20,7 +20,7 @@ RESULT_COUNT = 10
 
 column_list = ["RESULT", "MAJOR",  "UNIVERSITY", "RANK", "RESULT TIME",
                "DEGREE", "COLLGE TYPE", "GPA", "GRE", "GRE AW", "TOEFL",
-               "RESULTS", "SOURCE", "USER ID", "COMMENT"]
+               "RESULTS", "SOURCE", "USER ID"]
 
 
 @main.route("/")
@@ -210,7 +210,7 @@ def serach_by_name():
     data = form_table_data(db, result)
     pagination = Pagination(page, RESULT_COUNT, total_result)
 
-    return render_template("search_by_rank.html", data=data,
+    return render_template("search_by_rank_copy.html", data=data,
                            total=total_result, form=form,
                            column_list=column_list, pagination=pagination,
                            title="Search by University Name")
@@ -331,7 +331,7 @@ def serach_by_rank():
     pagination = Pagination(page, RESULT_COUNT, total_result)
 
 
-    return render_template("search_by_rank.html", data=data,
+    return render_template("search_by_rank_copy.html", data=data,
                            total=total_result, form=form,
                            column_list=column_list, pagination=pagination,
                            title="Search by University Rank")

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "page.html" as paging %}
+{% block title %}Offer Search{% endblock %}
+{% block page_content %}
+{{super()}}
+<div class="row">
+  <div class="page-header col-sm-6 col-md-8">
+    <h1>{{title}}</h1>
+  </div>
+  <div class="col-sm-3 col-md-2">
+            如果觉得对你有帮助，可以用微信打赏我嗷！>O<
+  </div>
+
+  <div class="col-sm-3 col-md-2">
+      <img src="{{ url_for('static', filename='wechat.jpg') }}" style="width:6em;height:6em;">
+  </div>
+</div>
+{% if form %}
+<div class="form-inline">
+<form action = "" method = post>
+         <fieldset>
+            {{ form.hidden_tag() }}
+            
+            <div id="all_fileds_div";>
+               
+               
+               <div class="form-group"  id="degree_div">
+               {{ form.degree.label }} {{ form.degree }}
+               </div>
+
+               <div class="form-group" id="result_div">
+               {{ form.result.label }} {{ form.result }}
+               </div>
+               {% if form.min_rank %}
+               <div class="form-group" id="min_rank_div">
+               {{ form.min_rank.label }} {{ form.min_rank }}
+               </div>
+
+               <div class="form-group" id="max_rank_div">
+               {{ form.max_rank.label }}
+               {{ form.max_rank }}
+               </div>
+               {% endif %}
+
+               <div class="form-group" id="filter_gpa_div">
+               {{ form.filter_gpa.label }}
+               {{ form.filter_gpa }}
+               </div>
+
+               <div class="form-group" id="min_gpa_div">
+               {{ form.min_gpa.label }}
+               {{ form.min_gpa }}
+               </div>
+
+               <div class="form-group" id="max_gpa_div">
+               {{ form.max_gpa.label }}
+               {{ form.max_gpa }}
+               </div>
+
+               <div class="form-group" id="filter_toefl_div">
+               {{ form.filter_toefl.label }}
+               {{ form.filter_toefl }}
+               </div>
+
+               <div class="form-group" id="min_toefl_div">
+               {{ form.min_toefl.label }}
+               {{ form.min_toefl }}
+               </div>
+               
+               <div class="form-group" id="max_toefl_div">
+               {{ form.max_toefl.label }}
+               {{ form.max_toefl }}
+                </div>
+
+                <div class="form-group" id="college_type_div">
+               {{ form.college_type.label }}
+               {{ form.college_type }}
+                </div>
+
+
+                <div class="form-group" id="major_div">
+               {{ form.major.label }}
+               {{ form.major }}
+                </div>
+
+                <div class="form-group" id="sort_div">
+               {{ form.sort.label }}
+               {{ form.sort }}
+                </div>
+                {% if title == "Search by University Name" %}
+                {% for field in form %}
+                    {% if field.id is number %}
+                        {{ field.label }} {{ field }}
+                  {% endif %}
+                {% endfor %}
+                {% endif %}
+
+               {{ form.submit }}
+            </div>
+            
+         </fieldset>
+      </form>
+</div>
+{% endif %}
+<p>
+{% if total %}
+<b>{{total}}</b> results match your search!
+{% endif %}
+</p>
+
+
+<table class="table table-hover">
+  <tr>
+    <th>ROW</th>
+  {% for col in column_list %}
+    <th>{{col}}</th>
+  {% endfor %}
+  </tr>
+  {% if data %}
+  {% set r = [0] %}
+  {% for row in data %}
+  <tr>
+  {% if r.append(r.pop() + 1) %}{% endif %} 
+  <td>{{r[0]}}-><a href="#10{{r[0]}}" data-toggle="popover" data-placement="bottom" data-trigger="focus" data-content={% if row['COMMENT'] %} "{{row['COMMENT']}}" {% else %} "Not exist" {% endif %}><span class="glyphicon glyphicon-hand-up"></span></a></td>
+  {% for col in column_list %}
+    <td>{% if col == "USER ID" %}
+    <a href="/applicant/{{row["USER ID"]}}">{{row["USER ID"]}}</a>
+    {% elif col == "SOURCE" %}
+    <a href={{row["URL"]}}>{{row["SOURCE"]}}</a>
+    {% else %}{{row[col]}}{% endif %}</td>
+  {% endfor %}
+  </tr>
+  {% endfor %}
+  {% endif %}
+</table>
+{% if pagination %}
+{{paging.render_pagination(pagination)}}
+{% endif %}
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+
+$(document).ready(function(){
+        $("#min_gpa_div").hide();
+        $("#max_gpa_div").hide();
+        $("#min_toefl_div").hide();
+        $("#max_toefl_div").hide();
+});
+
+
+
+$('#filter_gpa').click(function() {
+         $("#min_gpa_div").toggle();
+        $("#max_gpa_div").toggle();
+});
+
+
+
+$('#filter_toefl').click(function() {
+         $("#min_toefl_div").toggle();
+        $("#max_toefl_div").toggle();
+});
+
+</script>
+{% endblock %}

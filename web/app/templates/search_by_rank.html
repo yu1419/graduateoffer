@@ -4,6 +4,7 @@
 {% block title %}University Rank Search{% endblock %}
 {% block page_content %}
 {{super()}}
+<div id="body_container">
 <div class="page-header">
     <h1>{{title}}</h1>
 </div>
@@ -36,7 +37,7 @@
   {% for row in data %}
   <tr>
   {% if r.append(r.pop() + 1) %}{% endif %} 
-  <td>{{r[0]}}</td>
+  <td>{{r[0]}}-><a href="#10{{r[0]}}" data-toggle="popover" data-placement="bottom" data-trigger="focus" data-content={% if row['COMMENT'] %} "{{row['COMMENT']}}" {% else %} "Not exist" {% endif %}><span class="glyphicon glyphicon-hand-up"></span></a></td>
   {% for col in column_list %}
     <td>{% if col == "USER ID" %}
     <a href="/applicant/{{row["USER ID"]}}">{{row["USER ID"]}}</a>
@@ -51,4 +52,13 @@
 {% if pagination %}
 {{paging.render_pagination(pagination)}}
 {% endif %}
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+
+
+
+</script>
 {% endblock %}

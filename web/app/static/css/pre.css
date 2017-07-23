@@ -1,8 +1,17 @@
 /*CSS For common appearance*/
-body {
- min-height:100vh;
- background-color: hsla(210, 50%, 35%, 0.1);
+html,body{
+    height: 100%
 }
+select#college{
+  width: 5em;
+}
+input{
+  max-width: 6em;
+}
+option{
+  width: 500px;  
+}
+
 .hide{
   display:none;
 }
@@ -12,7 +21,9 @@ body {
 #follower_users{
   display: none;
 }
-
+#body_container{
+  min-height: 75vh;
+}
 .followed_count{
   text-decoration: underline;
   cursor: pointer;

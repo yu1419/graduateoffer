@@ -24,7 +24,7 @@ class Filter(FlaskForm):
     min_toefl = IntegerField("TOEFL:", default=70, id="min_toefl")
     max_toefl = IntegerField("-", default=120, id="max_toefl")
 
-    college_type = SelectField(u'College Type',
+    college_type = SelectField(u'College',
                                choices=[('', 'All'), ('985', '985'),
                                         ('211', '211'), ('Abroad', 'Abroad')],
                                default="",

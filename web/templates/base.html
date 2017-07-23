@@ -10,6 +10,7 @@
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
+
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
@@ -129,7 +130,9 @@
 {% block footer %}
 <div class = "footer">
   <p>Credit to all the users who shared their information on <a href="http://bbs.gter.net/">Gter</a>  and <a href="http://www.1point3acres.com/bbs/">1point3acres</a> .Also thanks for the support from my girlfriend Simin.&nbsp  &nbsp This website is built with Python Flask framework and hosted on AWS. Contact information: <a href="mailto:graduateoffer.get@gmail.com">
-  graduateoffer.get@gmail.com</a>.</p>
+  graduateoffer.get@gmail.com</a>.
+<img src="{{ url_for('static', filename='wechat.jpg') }}">
+  </p>
 </div>
 {% endblock %}
 
