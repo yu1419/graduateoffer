@@ -25,6 +25,11 @@ column_list = ["RESULT", "MAJOR",  "UNIVERSITY", "RANK", "RESULT TIME",
 
 @main.route("/")
 def index():
+    ip = request.access_route[-1]
+    url = "index"
+    v = Visitor(ip=ip, url=url, args="")
+    db.session.add(v)
+    db.session.commit()
 
     total_offer = get_sum_offer(db)
     total_applicant = get_sum_applicant(db)
@@ -78,6 +83,12 @@ def applicant(person_id):
 @main.route("/search-by-name", methods=['GET', 'POST'])
 def serach_by_name():
     args = request.args.copy()
+    ip = request.access_route[-1]
+    url = "search-by-name"
+    v = Visitor(ip=ip, url=url, args=str(args))
+    db.session.add(v)
+    db.session.commit()
+
     univ_list = args.get("univ_list", "1,2,3")
 
     if univ_list:
@@ -240,7 +251,8 @@ def serach_by_rank():
 
     form.major.choices = major_list
     ip = request.access_route[-1]
-    v = Visitor(ip=ip)
+    url = "search-by-rank"
+    v = Visitor(ip=ip, url=url, args=str(args))
     db.session.add(v)
     db.session.commit()
 

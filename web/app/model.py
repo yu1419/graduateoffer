@@ -51,6 +51,8 @@ class Visitor(db.Model):
     applicant_id = Column(Integer(), primary_key=True, autoincrement=True)
     ip = Column(String(100))
     visit_time = Column(DateTime(), default=datetime.now)
+    url = Column(String(100))
+    args = Column(String(1000))
 
 
 
