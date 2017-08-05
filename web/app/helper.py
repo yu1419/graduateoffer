@@ -6,6 +6,34 @@ from sqlalchemy.sql.expression import and_, distinct
 from math import ceil
 from sqlalchemy import desc, asc
 
+"""
+def get_user(email):
+    # get user by email
+    user = None
+    sql = "select count(*) from user where email = %s"
+    count = 0
+    with db.cursor() as cursor:
+        cursor.execute(sql, (email,))
+        result = cursor.fetchone()
+        if result:
+            count = result.get("count(*)", 0)
+    db.close()
+    if count:
+        user = User(email)
+    return user
+
+
+def send_async_email(app, mail, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(mail, msg):
+    app = current_app._get_current_object()
+    thr = Thread(target=send_async_email, args=[app, mail, msg])
+    thr.start()
+    return thr
+"""
 
 def get_sum_offer(db):
     return db.session.query(Offer).\
@@ -94,12 +122,10 @@ class Pagination(object):
                 yield num
                 last = num
 
+
+
+
 """
-def send_async_email(app, mail, msg):
-    with app.app_context():
-        mail.send(msg)
-
-
 def send_email(mail, msg):
     app = current_app._get_current_object()
     thr = Thread(target=send_async_email, args=[app, mail, msg])
@@ -149,23 +175,6 @@ def valid_login(email, password):
         return True
     else:
         return False
-
-
-def get_user(email):
-    db = get_db()
-    # get user by email
-    user = None
-    sql = "select count(*) from user where email = %s"
-    count = 0
-    with db.cursor() as cursor:
-        cursor.execute(sql, (email,))
-        result = cursor.fetchone()
-        if result:
-            count = result.get("count(*)", 0)
-    db.close()
-    if count:
-        user = User(email)
-    return user
 
 
 def convert_id(id):

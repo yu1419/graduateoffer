@@ -1,5 +1,5 @@
 from sqlalchemy import (Column, Integer, String, DateTime,
-                        Boolean, Numeric, Date, ForeignKey)
+                        Boolean, Numeric, Date, ForeignKey, Text)
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
@@ -14,6 +14,26 @@ engine = create_engine('mysql+pymysql://master:yusisheng123'
 
 Base = declarative_base()
 
+
+class Post(Base):
+    __tablename__ = 'post'
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
+                      'mysql_collate': 'utf8_general_ci'}
+    post_id = Column(Integer(), primary_key=True, autoincrement=True)
+    user_name = Column(String(100), default="Visitor")
+    content = Column(Text, default="Visitor")
+    post_time = Column(DateTime(), default=datetime.now)
+
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8',
+                      'mysql_collate': 'utf8_general_ci'}
+    comment_id = Column(Integer(), primary_key=True, autoincrement=True)
+    post_id = Column(Integer(), ForeignKey('post.post_id'))
+    user_name = Column(String(100), default="Visitor")
+    content = Column(Text, default="Visitor")
+    comment_time = Column(DateTime(), default=datetime.now)
 
 class All_url(Base):
     __tablename__ = 'url'

@@ -38,6 +38,17 @@ class Filter(FlaskForm):
     submit = SubmitField('Search', id="SubmitButton")
 
 
+class Post_form(FlaskForm):
+    content = StringField('Sugguestions or Questions:', validators=[Required()])
+    submit = SubmitField('Submit')
+
+
+class Comment_form(FlaskForm):
+    content = StringField('Reply:', validators=[Required()])
+    submit = SubmitField('Submit')
+
+
+
 class Login_form(FlaskForm):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])

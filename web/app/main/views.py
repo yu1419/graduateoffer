@@ -10,7 +10,7 @@ from ..helper import (get_sum_offer, get_sum_applicant, get_applicant,
 from sqlalchemy.sql.expression import and_
 from sqlalchemy import desc, asc
 from sqlalchemy.sql.expression import nullslast
-from .form import Filter
+from .form import Filter, Post_form, Comment_form
 from .major_list import major_list
 from wtforms import BooleanField
 
@@ -47,6 +47,17 @@ def user_basic_into(user_id):
 @main.route("/offer/<int:offer_id>")
 def offer(offer_id):
     pass
+
+
+@main.route("/comment-suggestion", methods=['GET', 'POST'])
+def comment_suggestion():
+    form = Post_form()
+
+    return render_template("comment_suggestion.html", form=form,
+                           title="Comment or Suggestion")
+
+
+
 
 
 @main.route("/applicant/<person_id>")
