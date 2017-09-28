@@ -1,0 +1,1 @@
+update offer set major = 'CE'  where (raw_major like '%CE%' and not raw_major like '%ece%' and character_length(raw_major)<7) or (raw_major like '%computer eng%' and not raw_major like '%lec%')

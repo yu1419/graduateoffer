@@ -8,7 +8,7 @@ from ..helper import (get_sum_offer, get_sum_applicant, get_applicant,
                       get_app_offer_count_from_dict, form_table_data,
                       Pagination, convert_string_to_bool, get_all_univ_name)
 from sqlalchemy.sql.expression import and_
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, extract
 from sqlalchemy.sql.expression import nullslast
 from .form import Filter, Post_form, Comment_form
 from .major_list import major_list
@@ -124,18 +124,33 @@ def serach_by_name():
     filter_toefl = convert_string_to_bool(filter_toefl)
     filter_gpa = (args.get("filter_gpa", False))
     filter_gpa = convert_string_to_bool(filter_gpa)
+
+    filter_gre = (args.get("filter_gre", False))
+    filter_gre = convert_string_to_bool(filter_gre)
+    filter_time = (args.get("filter_time", False))
+    filter_time = convert_string_to_bool(filter_time)
+
     form = F(result=args.get("result", "All"),
-                  degree=args.get("degree", ""),
-                  filter_gpa=filter_gpa,
-                  min_gpa=args.get("min_gpa", "2.0"),
-                  max_gpa=args.get("max_gpa", "100"),
-                  filter_toefl=filter_toefl,
-                  min_toefl=args.get("min_toefl", "60"),
-                  max_toefl=args.get("max_toefl", "120"),
-                  major=args.get("major", ""),
-                  sort=args.get("sort", "received_date"),
-                  college_type=args.get("college_type", "")
-                  )
+             degree=args.get("degree", ""),
+             filter_gpa=filter_gpa,
+             min_gpa=args.get("min_gpa", "2.0"),
+             max_gpa=args.get("max_gpa", "100"),
+             filter_toefl=filter_toefl,
+             min_toefl=args.get("min_toefl", "60"),
+             max_toefl=args.get("max_toefl", "120"),
+
+             filter_gre=filter_gre,
+             min_gre=args.get("min_gre", "300"),
+             max_gre=args.get("max_gre", "340"),
+
+             filter_time=filter_time,
+             min_time=args.get("min_time", "2010"),
+             max_time=args.get("max_time", "2017"),
+
+             major=args.get("major", ""),
+             sort=args.get("sort", "received_date"),
+             college_type=args.get("college_type", "")
+             )
 
     form.major.choices = major_list
 
@@ -149,6 +164,15 @@ def serach_by_name():
         args["filter_toefl"] = form.filter_toefl.data
         args["min_toefl"] = form.min_toefl.data
         args["max_toefl"] = form.max_toefl.data
+
+        args["filter_gre"] = form.filter_gre.data
+        args["min_gre"] = form.min_gre.data
+        args["max_gre"] = form.max_gre.data
+
+        args["filter_time"] = form.filter_time.data
+        args["min_time"] = form.min_time.data
+        args["max_time"] = form.max_time.data
+
         args["major"] = form.major.data
         args["sort"] = form.sort.data
         args["max_toefl"] = form.max_toefl.data
@@ -175,12 +199,22 @@ def serach_by_name():
     filter_gpa = (args.get("filter_gpa", False))
     filter_gpa = convert_string_to_bool(filter_gpa)
 
+    filter_gre = (args.get("filter_gre", False))
+    filter_gre = convert_string_to_bool(filter_gre)
+
+    filter_time = (args.get("filter_time", False))
+    filter_time = convert_string_to_bool(filter_time)
+
     max_gpa = float(args.get('max_gpa', 100))
     min_gpa = float(args.get('min_gpa', 2))
 
     major = args.get('major', "")
-    #  max_gre = int(args.get('max_gre', 340))
-    #  min_gre = int(args.get('min_gre', 290))
+
+    max_gre = int(args.get('max_gre', 340))
+    min_gre = int(args.get('min_gre', 300))
+    max_time = int(args.get('max_time', 2017))
+    min_time = int(args.get('min_time', 2010))
+
     max_toefl = int(args.get('max_toefl', 60))
     min_toefl = int(args.get('min_toefl', 120))
     degree = args.get('degree', "")
@@ -216,6 +250,12 @@ def serach_by_name():
         query = query.filter(Applicant.gpa.between(min_gpa, max_gpa))
     if filter_toefl:
         query = query.filter(Applicant.toefl.between(min_toefl, max_toefl))
+    if filter_gre:
+        query = query.filter(Applicant.gre.between(min_gre, max_gre))
+    if filter_time:
+        query = query.filter((extract('year', Offer.result_time) >= min_time),
+                             (extract('year', Offer.result_time) <= max_time))
+
     total_result = query.count()
 
     if sort == "gpa":
@@ -245,6 +285,12 @@ def serach_by_rank():
     filter_toefl = convert_string_to_bool(filter_toefl)
     filter_gpa = (args.get("filter_gpa", False))
     filter_gpa = convert_string_to_bool(filter_gpa)
+
+    filter_gre = (args.get("filter_gre", False))
+    filter_gre = convert_string_to_bool(filter_gre)
+    filter_time = (args.get("filter_time", False))
+    filter_time = convert_string_to_bool(filter_time)
+
     form = Filter(result=args.get("result", "All"),
                   degree=args.get("degree", ""),
                   min_rank=args.get("min_rank", "1"),
@@ -255,6 +301,15 @@ def serach_by_rank():
                   filter_toefl=filter_toefl,
                   min_toefl=args.get("min_toefl", "60"),
                   max_toefl=args.get("max_toefl", "120"),
+
+                  filter_gre=filter_gre,
+                  min_gre=args.get("min_gre", "300"),
+                  max_gre=args.get("max_gre", "340"),
+
+                  filter_time=filter_time,
+                  min_time=args.get("min_time", "2010"),
+                  max_time=args.get("max_time", "2017"),
+
                   major=args.get("major", ""),
                   sort=args.get("sort", "received_date"),
                   college_type=args.get("college_type", "")
@@ -279,6 +334,15 @@ def serach_by_rank():
         args["filter_toefl"] = form.filter_toefl.data
         args["min_toefl"] = form.min_toefl.data
         args["max_toefl"] = form.max_toefl.data
+
+        args["filter_gre"] = form.filter_gre.data
+        args["min_gre"] = form.min_gre.data
+        args["max_gre"] = form.max_gre.data
+
+        args["filter_time"] = form.filter_time.data
+        args["min_time"] = form.min_time.data
+        args["max_time"] = form.max_time.data
+
         args["major"] = form.major.data
         args["sort"] = form.sort.data
         args["max_toefl"] = form.max_toefl.data
@@ -292,16 +356,27 @@ def serach_by_rank():
 
     filter_toefl = (args.get("filter_toefl", False))
     filter_toefl = convert_string_to_bool(filter_toefl)
+
     filter_gpa = (args.get("filter_gpa", False))
     filter_gpa = convert_string_to_bool(filter_gpa)
+
+    filter_gre = (args.get("filter_gre", False))
+    filter_gre = convert_string_to_bool(filter_gre)
+
+    filter_time = (args.get("filter_time", False))
+    filter_time = convert_string_to_bool(filter_time)
 
     max_gpa = float(args.get('max_gpa', 100))
     min_gpa = float(args.get('min_gpa', 2))
     max_rank = int(args.get('max_rank', 80))
     min_rank = int(args.get('min_rank', 1))
     major = args.get('major', "")
+
     max_gre = int(args.get('max_gre', 340))
-    min_gre = int(args.get('min_gre', 290))
+    min_gre = int(args.get('min_gre', 300))
+    max_time = int(args.get('max_time', 2017))
+    min_time = int(args.get('min_time', 2010))
+
     max_toefl = int(args.get('max_toefl', 60))
     min_toefl = int(args.get('min_toefl', 120))
     degree = args.get('degree', "")
@@ -337,6 +412,11 @@ def serach_by_rank():
         query = query.filter(Applicant.gpa.between(min_gpa, max_gpa))
     if filter_toefl:
         query = query.filter(Applicant.toefl.between(min_toefl, max_toefl))
+    if filter_gre:
+        query = query.filter(Applicant.gre.between(min_gre, max_gre))
+    if filter_time:
+        query = query.filter((extract('year', Offer.result_time) >= min_time),
+                             (extract('year', Offer.result_time) <= max_time))
     total_result = query.count()
 
     if sort == "gpa":
@@ -352,7 +432,6 @@ def serach_by_rank():
     data = []
     data = form_table_data(db, result)
     pagination = Pagination(page, RESULT_COUNT, total_result)
-
 
     return render_template("search_by_rank_copy.html", data=data,
                            total=total_result, form=form,

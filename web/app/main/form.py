@@ -24,6 +24,16 @@ class Filter(FlaskForm):
     min_toefl = IntegerField("TOEFL:", default=70, id="min_toefl")
     max_toefl = IntegerField("-", default=120, id="max_toefl")
 
+    filter_gre = BooleanField('Filter GRE V', default=False,
+                              id="filter_gre")
+    min_gre = IntegerField("GRE V:", default=300, id="min_gre")
+    max_gre = IntegerField("-", default=340, id="max_gre")
+
+    filter_time = BooleanField('Filter Year', default=False,
+                               id="filter_time")
+    min_time = IntegerField("Year:", default=2010, id="min_time")
+    max_time = IntegerField("-", default=2017, id="max_time")
+
     college_type = SelectField(u'College',
                                choices=[('', 'All'), ('985', '985'),
                                         ('211', '211'), ('Abroad', 'Abroad')],

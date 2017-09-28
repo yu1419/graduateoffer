@@ -73,6 +73,39 @@
                {{ form.max_toefl }}
                 </div>
 
+
+               <div class="form-group" id="filter_gre_div">
+               {{ form.filter_gre.label }}
+               {{ form.filter_gre }}
+               </div>
+
+               <div class="form-group" id="min_gre_div">
+               {{ form.min_gre.label }}
+               {{ form.min_gre }}
+               </div>
+               
+               <div class="form-group" id="max_gre_div">
+               {{ form.max_gre.label }}
+               {{ form.max_gre }}
+                </div>
+
+               <div class="form-group" id="filter_time_div">
+               {{ form.filter_time.label }}
+               {{ form.filter_time }}
+               </div>
+
+               <div class="form-group" id="min_time_div">
+               {{ form.min_time.label }}
+               {{ form.min_time }}
+               </div>
+               
+               <div class="form-group" id="max_time_div">
+               {{ form.max_time.label }}
+               {{ form.max_time }}
+                </div>
+
+
+
                 <div class="form-group" id="college_type_div">
                {{ form.college_type.label }}
                {{ form.college_type }}
@@ -147,10 +180,38 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-        $("#min_gpa_div").hide();
-        $("#max_gpa_div").hide();
-        $("#min_toefl_div").hide();
-        $("#max_toefl_div").hide();
+
+        if(document.getElementById('filter_gre').checked) {
+          $("#min_gre_div").show();
+          $("#max_gre_div").show();
+        } else {
+          $("#min_gre_div").hide();
+          $("#max_gre_div").hide();
+        }
+
+        if(document.getElementById('filter_toefl').checked) {
+          $("#min_toefl_div").show();
+          $("#max_toefl_div").show();
+        } else {
+          $("#min_toefl_div").hide();
+          $("#max_toefl_div").hide();
+        }
+
+        if(document.getElementById('filter_gpa').checked) {
+          $("#min_gpa_div").show();
+          $("#max_gpa_div").show();
+        } else {
+          $("#min_gpa_div").hide();
+          $("#max_gpa_div").hide();
+        }
+
+        if(document.getElementById('filter_time').checked) {
+          $("#min_time_div").show();
+          $("#max_time_div").show();
+        } else {
+          $("#min_time_div").hide();
+          $("#max_time_div").hide();
+        }
 });
 
 
@@ -158,6 +219,17 @@ $(document).ready(function(){
 $('#filter_gpa').click(function() {
          $("#min_gpa_div").toggle();
         $("#max_gpa_div").toggle();
+});
+
+
+$('#filter_gre').click(function() {
+         $("#min_gre_div").toggle();
+        $("#max_gre_div").toggle();
+});
+
+$('#filter_time').click(function() {
+         $("#min_time_div").toggle();
+        $("#max_time_div").toggle();
 });
 
 
